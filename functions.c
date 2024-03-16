@@ -26,7 +26,7 @@ int check_guess(int guess, int actual_number);
 
 void display_result(int result);
 
-void play_game()
+void play_game(void)
 {
     printf("==================================================================================\n");
     printf("\t\tWelcome to Guess the Number Game\n\nIn this game, the computer picks a random number within a chosen range, and you\ntry to guess it. The goal is to guess the number in the fewest attempts possible\n");
