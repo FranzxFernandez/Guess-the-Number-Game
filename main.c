@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "functions.h"
 
-int main()
+int main(void)
 {
     play_game();
     return 0;

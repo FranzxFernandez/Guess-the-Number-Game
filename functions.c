@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include "stdbool.h"
 
 void init_random_seed(void)
@@ -11,7 +12,7 @@ void init_random_seed(void)
 
 int generate_random_number(int min, int max)
 {
-    return (rand() % max) + min;
+    return rand() % (max - min + 1) + min;
 }
 
 int get_player_guess(void)
@@ -72,14 +73,27 @@ void display_result(int result, int attemps)
 void play_game(void)
 {
     printf("==================================================================================\n");
-    printf("\t\tWelcome to Guess the Number Game\n\nIn this game, the computer picks a random number within a chosen range, and you\ntry to guess it. The goal is to guess the number in the fewest attempts possible\n");
+    printf("\t\tWelcome to Guess the Number Game\n\nIn this game, the computer picks a random number within a chosen range, and you\ntry to guess it. The goal is to guess the number in the fewest attempts possible.\n");
     printf("==================================================================================\n");
 
     printf("\n\tPlease enter the range!\n\t-----------------------\nMin: ");
     int min, max;
-    (void)scanf("%d", &min);
+    int inputStatus = scanf("%d", &min);
+    while (getchar() != '\n');
+
     printf("Max: ");
-    (void)scanf("%d", &max);
+    int inputStatus_1 = scanf("%d", &max);
+
+    if (inputStatus != 1 || inputStatus_1 != 1)
+    {
+        printf("\nThat's not an integer. Closing the game.\n");
+        return;
+    }
+    if (max <= min) 
+    {
+        max = min;
+    }
+
     printf("\nThe range you entered is between %d and %d\n", min, max);
 
     init_random_seed();
@@ -90,6 +104,12 @@ void play_game(void)
     while (!exit)
     {
         int userGuess = get_player_guess();
+        if (userGuess > max || userGuess < min)
+        {
+            printf("Please enter a number between %d and %d!\n", min, max);
+            continue;
+        }
+
         result = check_guess(userGuess, rand_number);
 
         if (result == 1)
@@ -103,7 +123,7 @@ void play_game(void)
         else
         {
             printf("\nCorrect guess. You win!\n");
-            result = userGuess;
+            result = rand_number;
             exit = true;
         }
         attemps++;
